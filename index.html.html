@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Personal Finance Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .page { display: none; }
+    .active { display: block; }
+    nav a { margin-right: 10px; color: blue; text-decoration: underline; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+    th { cursor: pointer; background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+<h1>Personal Finance Dashboard</h1>
+
+<!-- Navigation -->
+<nav>
+  <a onclick="showPage('dashboard')">Dashboard</a>
+  <a onclick="showPage('transactions')">Transactions</a>
+  <a onclick="showPage('reports')">Reports</a>
+  <a onclick="showPage('settings')">Settings</a>
+</nav>
+
+<!-- Dashboard Page -->
+<div id="dashboard" class="page active">
+  <h2>Dashboard</h2>
+  <p>Welcome to your personal finance dashboard.</p>
+</div>
+
+<!-- Transactions Page -->
+<div id="transactions" class="page">
+  <h2>Transactions</h2>
+  <table id="tx-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Date &#x25B2;&#x25BC;</th>
+        <th onclick="sortTable(1)">Description &#x25B2;&#x25BC;</th>
+        <th onclick="sortTable(2)">Category &#x25B2;&#x25BC;</th>
+        <th onclick="sortTable(3)">Amount &#x25B2;&#x25BC;</th>
+      </tr>
+    </thead>
+    <tbody id="tx-body">
+      <tr><td>2025-09-25</td><td>Grocery</td><td>Food</td><td>-500</td></tr>
+      <tr><td>2025-09-24</td><td>Salary</td><td>Income</td><td>5000</td></tr>
+      <tr><td>2025-09-23</td><td>Electricity Bill</td><td>Utilities</td><td>-1200</td></tr>
+      <tr><td>2025-09-22</td><td>Coffee</td><td>Food</td><td>-100</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Reports Page -->
+<div id="reports" class="page">
+  <h2>Reports</h2>
+  <p>Monthly summary and charts will be here (demo).</p>
+</div>
+
+<!-- Settings Page -->
+<div id="settings" class="page">
+  <h2>Settings</h2>
+  <p>Here you can configure your dashboard (demo).</p>
+</div>
+
+<script>
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  // Simple table sorting
+  let sortDir = [true, true, true, true]; // direction for each column
+
+  function sortTable(colIndex) {
+    const table = document.getElementById("tx-table");
+    let rows = Array.from(table.tBodies[0].rows);
+    const isNum = colIndex === 3; // Amount column
+
+    rows.sort((a,b)=>{
+      let valA = a.cells[colIndex].innerText;
+      let valB = b.cells[colIndex].innerText;
+      if(isNum){
+        valA = parseFloat(valA);
+        valB = parseFloat(valB);
+      }
+      if(valA < valB) return sortDir[colIndex] ? -1 : 1;
+      if(valA > valB) return sortDir[colIndex] ? 1 : -1;
+      return 0;
+    });
+
+    sortDir[colIndex] = !sortDir[colIndex]; // reverse next time
+
+    rows.forEach(r => table.tBodies[0].appendChild(r));
+  }
+</script>
+
+</body>
+</html>
